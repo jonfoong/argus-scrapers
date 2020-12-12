@@ -3,15 +3,10 @@ library(tm)
 library(tidyverse)
 library(pushoverr)
 library(rvest)
-library(googlesheets4)
 
 
 url <- "http://www.customs.go.kr/english/ad/tradeCountry/TradeCommodityList.do?mi=8044"
 ua <- user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
-
-gs4_deauth()
-update<-read_sheet("https://docs.google.com/spreadsheets/d/1GR_xobGPzgXLBb5enjXS8toEUqmlEejeoGjx052ot7I/edit?usp=sharing",4,col_names = TRUE)
-if (update$Korea=='not updated'){
 
 # specify month
 cmth<-Sys.Date() %>% str_remove("\\d{4}-") %>% 
@@ -52,7 +47,6 @@ Country<-str_extract(x,"\\D+\\s{1,}") %>% trimws()
 krimport<-add_column(x1,Country,.before="Weight") %>% 
   filter(!USD==0 & !Weight==0)
 total<-krimport %>% summarise(weight=sum(Weight),USD=sum(USD))
-}
 
 #notification
 if (!total$weight==0){
@@ -60,4 +54,3 @@ if (!total$weight==0){
            user="uccrmx7ajshvdsgbx2e2qy17eorpsx", 
            app="akhzmh5yoco7koy31oos1micwsbxh7")
 }
-

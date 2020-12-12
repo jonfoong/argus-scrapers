@@ -3,15 +3,9 @@ library(rvest)
 library(tm)
 library(tidyverse)
 library(pushoverr)
-library(googlesheets4)
 
 url <- "http://www.customs.go.th/statistic_report.php?show_search=1"
 ua <- user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36")
-
-gs4_deauth()
-update<-read_sheet("https://docs.google.com/spreadsheets/d/1GR_xobGPzgXLBb5enjXS8toEUqmlEejeoGjx052ot7I/edit?usp=sharing",4,col_names = TRUE)
-if (update$Thailand=='not updated'){
-
 
 # specify month
 cmth<-Sys.Date() %>% str_remove("\\d{4}-") %>% 
@@ -57,5 +51,4 @@ if (!sum(thimport$Weight)==0){
   pushover(message='Thai imports are updated', 
            user="uccrmx7ajshvdsgbx2e2qy17eorpsx", 
            app="akhzmh5yoco7koy31oos1micwsbxh7")
-}
 }
